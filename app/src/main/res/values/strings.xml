@@ -1,3 +1,6 @@
 <resources>
 	<string name="app_name">DaftTap Challenge</string>
+	<string name="dafttap_challenge">DaftTap Challenge</string>
+	<string name="start_new">Start New</string>
+	<string name="click">CLICK</string>
 </resources>
