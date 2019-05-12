@@ -5,5 +5,6 @@
 
 	<TextView
 			android:layout_width="match_parent"
-			android:layout_height="match_parent" android:id="@+id/singleScoreView"/>
+			android:layout_height="wrap_content" android:id="@+id/singleScoreView" android:shadowColor="@android:color/background_dark"
+			android:background="?attr/panelBackground" android:textColor="#F44336" android:backgroundTint="#422E2E"/>
 </LinearLayout>

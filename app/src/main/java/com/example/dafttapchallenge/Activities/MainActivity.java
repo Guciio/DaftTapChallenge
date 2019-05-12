@@ -6,17 +6,19 @@ import java.util.Date;
 import com.example.dafttapchallenge.Data.Score;
 import com.example.dafttapchallenge.R;
 
+import android.app.ActivityOptions;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity
 		timerView = findViewById(R.id.timer);
 		clickButton = findViewById(R.id.clickButton);
 		clickButton.setEnabled(true);
+		final Animation myAnim = AnimationUtils.loadAnimation(this,R.anim.bounce);
 		scoreDataSaver = new Score(this);
 		simpleDateFormat = new SimpleDateFormat("dd/MM hh-mm-ss");
 
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity
 				{
 					numberOfCilcks++;
 					numberOfClicksView.setText("Clicks: " + numberOfCilcks);
+					clickButton.startAnimation(myAnim);
 					Log.i("Number of cliks",String.valueOf(numberOfCilcks));
 				}
 			}
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			public void onTick(long millisUntilFinished)
 			{
-				timeToStart = millisUntilFinished;
+				timeToStart = millisUntilFinished+1000;
 				updateTimerView();
 			}
 
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity
 							public void onClick(DialogInterface dialog, int which)
 							{
 								Intent scoreScreen = new Intent(MainActivity.this, ScoreActivity.class);
-								startActivity(scoreScreen);
+								startActivity(scoreScreen, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
 							}
 						})
 						.show();
