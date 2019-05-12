@@ -1,27 +1,20 @@
 package com.example.dafttapchallenge.Activities;
 
-import static java.security.AccessController.getContext;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.example.dafttapchallenge.Data.Score;
 import com.example.dafttapchallenge.R;
-import com.google.gson.Gson;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -103,10 +96,22 @@ public class MainActivity extends AppCompatActivity
 
 				AddData(numberOfCilcks,format);
 				Log.i("Data to save",numberOfCilcks +" "+ format);
+				Cursor data = scoreDataSaver.getData();
+				String noTop5Score = "";
 
+				while(data.moveToNext())
+				{
+					if (numberOfCilcks > Integer.valueOf(data.getString(0)))
+					{
+						noTop5Score = "\nYour score is in top 5";
+					}else
+					{
+						noTop5Score = "\nYour score is not in top 5";
+					}
+				}
 				new AlertDialog.Builder(MainActivity.this)
 						.setTitle("Score")
-						.setMessage("Your score is " + numberOfCilcks)
+						.setMessage("Your score is " + numberOfCilcks + noTop5Score)
 						.setCancelable(false)
 						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
 						{

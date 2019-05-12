@@ -1,8 +1,5 @@
 package com.example.dafttapchallenge.Activities;
 
-import java.util.ArrayList;
-
-import com.example.dafttapchallenge.Data.Score;
 import com.example.dafttapchallenge.R;
 
 import android.content.Intent;
