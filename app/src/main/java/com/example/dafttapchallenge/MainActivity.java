@@ -11,18 +11,18 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
 {
-	private static final long TIME_TO_START_GAME_IN_MILLIS = 3000;
+	private static final long TIME_TO_PLAY_GAME_IN_MILLIS = 5000;
 
 	public int numberOfCilcks;
 
-	private TextView timerView;
+	private TextView timerView,numberOfClicksView;
 	private Button clickButton;
 	private FloatingActionButton goToScoreButton;
 
-	private Boolean canClick;
+	public static Boolean canClick;
 	private CountDownTimer mCountDownTimer;
 
-	private long timeToStart = TIME_TO_START_GAME_IN_MILLIS;
+	private long timeToStart = TIME_TO_PLAY_GAME_IN_MILLIS;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -30,9 +30,10 @@ public class MainActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		numberOfClicksView = findViewById(R.id.numberOfClicks);
 		timerView = findViewById(R.id.timer);
 		clickButton = findViewById(R.id.clickButton);
-		clickButton.setEnabled(false);
+		clickButton.setEnabled(true);
 
 		timer();
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
 				if(canClick)
 				{
 					numberOfCilcks++;
+					numberOfClicksView.setText(String.valueOf(numberOfCilcks));
 					Log.i("Number of cliks",String.valueOf(numberOfCilcks));
 				}
 			}
@@ -69,12 +71,12 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			public void onFinish()
 			{
-				timerView.setText("GO");
-				clickButton.setEnabled(true);
-				canClick=true;
+				timerView.setText("TIME OUT");
+				clickButton.setEnabled(false);
+				canClick=false;
 			}
 		}.start();
-		canClick = false;
+		canClick = true;
 	}
 
 	private void updateTimerView()
@@ -83,8 +85,4 @@ public class MainActivity extends AppCompatActivity
 		timerView.setText(String.valueOf(seconds));
 	}
 
-	private void clickCount()
-	{
-
-	}
 }
