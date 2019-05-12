@@ -2,6 +2,7 @@ package com.example.dafttapchallenge.Activities;
 
 import com.example.dafttapchallenge.R;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -34,7 +35,7 @@ public class TimerActivity extends AppCompatActivity
 			@Override
 			public void onTick(long millisUntilFinished)
 			{
-				timeToStart = millisUntilFinished;
+				timeToStart = millisUntilFinished+1000;
 				updateTimerView();
 			}
 
