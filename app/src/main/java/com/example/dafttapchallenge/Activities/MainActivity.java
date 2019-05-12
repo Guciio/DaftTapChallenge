@@ -1,4 +1,9 @@
-package com.example.dafttapchallenge;
+package com.example.dafttapchallenge.Activities;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.example.dafttapchallenge.R;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +30,9 @@ public class MainActivity extends AppCompatActivity
 	public static Boolean canClick;
 	private CountDownTimer mCountDownTimer;
 
+	SimpleDateFormat simpleDateFormat;
+	String format;
+
 	private long timeToStart = TIME_TO_PLAY_GAME_IN_MILLIS;
 
 	@Override
@@ -37,6 +45,9 @@ public class MainActivity extends AppCompatActivity
 		timerView = findViewById(R.id.timer);
 		clickButton = findViewById(R.id.clickButton);
 		clickButton.setEnabled(true);
+
+		simpleDateFormat = new SimpleDateFormat("dd/MM/hh-mm-ss");
+		format = simpleDateFormat.format(new Date());
 
 		timer();
 
@@ -53,11 +64,6 @@ public class MainActivity extends AppCompatActivity
 				}
 			}
 		});
-	}
-
-	private void game()
-	{
-
 	}
 
 	private void timer()
@@ -77,6 +83,8 @@ public class MainActivity extends AppCompatActivity
 				timerView.setText("TIME OUT");
 				clickButton.setEnabled(false);
 				canClick=false;
+				ScoreActivity.score.add("Score: "+numberOfCilcks +"\nTime of getting: "+ format);
+				Log.i("Data to save",numberOfCilcks +" "+ format);
 				new AlertDialog.Builder(MainActivity.this)
 						.setTitle("Score")
 						.setMessage("Your score is " + numberOfCilcks)

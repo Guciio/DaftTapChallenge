@@ -1,11 +1,13 @@
-package com.example.dafttapchallenge;
+package com.example.dafttapchallenge.Activities;
+
+import java.util.ArrayList;
+
+import com.example.dafttapchallenge.R;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 public class TimerActivity extends AppCompatActivity
@@ -23,6 +25,7 @@ public class TimerActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.timer_screen);
 
+		ScoreActivity.score = new ArrayList<>();
 		timerView = findViewById(R.id.timerToStart);
 		dataToIntent = this;
 		timer();
