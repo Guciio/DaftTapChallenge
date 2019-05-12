@@ -18,12 +18,8 @@ import android.widget.Button;
 
 public class ScoreActivity extends AppCompatActivity
 {
-	private RecyclerView scoreTable;
-	private MyRecyclerViewAdapter recAdapter;
 	private ArrayList<String> score = new ArrayList<>();
 	private ArrayList<Integer> scoreToSort = new ArrayList<>();
-	private Button startNew;
-	private Score scoreDataToGet;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -31,9 +27,9 @@ public class ScoreActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_score_screen);
 
-		scoreTable = findViewById(R.id.scoreTableView);
-		startNew = findViewById(R.id.playButton);
-		scoreDataToGet = new Score(this);
+		RecyclerView scoreTable = findViewById(R.id.scoreTableView);
+		Button startNew = findViewById(R.id.playButton);
+		Score scoreDataToGet = new Score(this);
 
 		Cursor data = scoreDataToGet.getData();
 
@@ -48,7 +44,7 @@ public class ScoreActivity extends AppCompatActivity
 
 		Log.i("TEST", String.valueOf(score));
 		scoreTable.setLayoutManager(new LinearLayoutManager(this));
-		recAdapter = new MyRecyclerViewAdapter(this,score);
+		MyRecyclerViewAdapter recAdapter = new MyRecyclerViewAdapter(this, score);
 		scoreTable.setAdapter(recAdapter);
 
 		startNew.setOnClickListener(new View.OnClickListener()
@@ -60,5 +56,14 @@ public class ScoreActivity extends AppCompatActivity
 				startActivity(newGame);
 			}
 		});
+	}
+
+	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		setContentView(R.layout.timer_screen);
+		Intent backToApp = new Intent(this,TimerActivity.class);
+		startActivity(backToApp);
 	}
 }

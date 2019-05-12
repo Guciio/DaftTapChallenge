@@ -15,7 +15,6 @@ public class TimerActivity extends AppCompatActivity
 
 	private TimerActivity dataToIntent;
 	private TextView timerView;
-	private CountDownTimer mCountDownTimer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -30,12 +29,12 @@ public class TimerActivity extends AppCompatActivity
 
 	private void timer()
 	{
-		mCountDownTimer = new CountDownTimer(timeToStart,1000)
+		CountDownTimer mCountDownTimer = new CountDownTimer(timeToStart, 1000)
 		{
 			@Override
 			public void onTick(long millisUntilFinished)
 			{
-				timeToStart=millisUntilFinished;
+				timeToStart = millisUntilFinished;
 				updateTimerView();
 			}
 
@@ -43,8 +42,8 @@ public class TimerActivity extends AppCompatActivity
 			public void onFinish()
 			{
 				timerView.setText("PLAY");
-				MainActivity.canClick=true;
-				Intent gameIntent = new Intent(dataToIntent,MainActivity.class);
+				MainActivity.canClick = true;
+				Intent gameIntent = new Intent(dataToIntent, MainActivity.class);
 				startActivity(gameIntent);
 			}
 		}.start();

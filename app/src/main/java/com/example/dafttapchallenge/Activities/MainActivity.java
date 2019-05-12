@@ -29,16 +29,14 @@ public class MainActivity extends AppCompatActivity
 
 	private TextView timerView,numberOfClicksView;
 	private Button clickButton;
-	private FloatingActionButton goToScoreButton;
 
 	public static Boolean canClick;
-	private CountDownTimer mCountDownTimer;
 
 	ContentValues values = new ContentValues();
 	Score scoreDataSaver;
 
 	SimpleDateFormat simpleDateFormat;
-	String format,jsonScore;
+	String format;
 
 	private long timeToStart = TIME_TO_PLAY_GAME_IN_MILLIS;
 
@@ -72,14 +70,23 @@ public class MainActivity extends AppCompatActivity
 		});
 	}
 
+	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		setContentView(R.layout.timer_screen);
+		Intent backToApp = new Intent(this,TimerActivity.class);
+		startActivity(backToApp);
+	}
+
 	private void timer()
 	{
-		mCountDownTimer = new CountDownTimer(timeToStart,1000)
+		CountDownTimer mCountDownTimer = new CountDownTimer(timeToStart, 1000)
 		{
 			@Override
 			public void onTick(long millisUntilFinished)
 			{
-				timeToStart=millisUntilFinished;
+				timeToStart = millisUntilFinished;
 				updateTimerView();
 			}
 
@@ -88,29 +95,29 @@ public class MainActivity extends AppCompatActivity
 			{
 				timerView.setText("TIME OUT");
 				clickButton.setEnabled(false);
-				canClick=false;
+				canClick = false;
 				format = simpleDateFormat.format(new Date());
 
 				values.put("Score", numberOfCilcks);
 				values.put("TimeStamp", format);
 
-				AddData(numberOfCilcks,format);
-				Log.i("Data to save",numberOfCilcks +" "+ format);
+				AddData(numberOfCilcks, format);
+				Log.i("Data to save", numberOfCilcks + " " + format);
 				Cursor data = scoreDataSaver.getData();
 				String noTop5Score = "";
 
-				while(data.moveToNext())
+				while (data.moveToNext())
 				{
 					if (numberOfCilcks > Integer.valueOf(data.getString(0)))
 					{
 						noTop5Score = "\nYour score is in top 5";
-					}else
+					}
+					else
 					{
 						noTop5Score = "\nYour score is not in top 5";
 					}
 				}
-				new AlertDialog.Builder(MainActivity.this)
-						.setTitle("Score")
+				new AlertDialog.Builder(MainActivity.this).setTitle("Score")
 						.setMessage("Your score is " + numberOfCilcks + noTop5Score)
 						.setCancelable(false)
 						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
@@ -118,10 +125,11 @@ public class MainActivity extends AppCompatActivity
 							@Override
 							public void onClick(DialogInterface dialog, int which)
 							{
-								Intent scoreScreen = new Intent(MainActivity.this,ScoreActivity.class);
+								Intent scoreScreen = new Intent(MainActivity.this, ScoreActivity.class);
 								startActivity(scoreScreen);
 							}
-						}).show();
+						})
+						.show();
 			}
 		}.start();
 		canClick = true;
