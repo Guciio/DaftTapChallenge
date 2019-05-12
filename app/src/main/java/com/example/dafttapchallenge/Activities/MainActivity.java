@@ -3,19 +3,23 @@ package com.example.dafttapchallenge.Activities;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.example.dafttapchallenge.Data.Score;
 import com.example.dafttapchallenge.R;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -30,8 +34,11 @@ public class MainActivity extends AppCompatActivity
 	public static Boolean canClick;
 	private CountDownTimer mCountDownTimer;
 
+	ContentValues values = new ContentValues();
+	Score scoreDataSaver;
+
 	SimpleDateFormat simpleDateFormat;
-	String format;
+	String format,jsonScore;
 
 	private long timeToStart = TIME_TO_PLAY_GAME_IN_MILLIS;
 
@@ -45,9 +52,8 @@ public class MainActivity extends AppCompatActivity
 		timerView = findViewById(R.id.timer);
 		clickButton = findViewById(R.id.clickButton);
 		clickButton.setEnabled(true);
-
-		simpleDateFormat = new SimpleDateFormat("dd/MM/hh-mm-ss");
-		format = simpleDateFormat.format(new Date());
+		scoreDataSaver = new Score(this);
+		simpleDateFormat = new SimpleDateFormat("dd/MM hh-mm-ss");
 
 		timer();
 
@@ -83,11 +89,30 @@ public class MainActivity extends AppCompatActivity
 				timerView.setText("TIME OUT");
 				clickButton.setEnabled(false);
 				canClick=false;
-				ScoreActivity.score.add("Score: "+numberOfCilcks +"\nTime of getting: "+ format);
+				format = simpleDateFormat.format(new Date());
+
+				values.put("Score", numberOfCilcks);
+				values.put("TimeStamp", format);
+
+				AddData(numberOfCilcks,format);
 				Log.i("Data to save",numberOfCilcks +" "+ format);
+				Cursor data = scoreDataSaver.getData();
+				String noTop5Score = "";
+
+				while(data.moveToNext())
+				{
+					if (numberOfCilcks > Integer.valueOf(data.getString(0)))
+					{
+						noTop5Score = "\nYour score is in top 5";
+					}else
+					{
+						noTop5Score = "\nYour score is not in top 5";
+					}
+				}
 				new AlertDialog.Builder(MainActivity.this)
 						.setTitle("Score")
-						.setMessage("Your score is " + numberOfCilcks)
+						.setMessage("Your score is " + numberOfCilcks + noTop5Score)
+						.setCancelable(false)
 						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
 						{
 							@Override
@@ -108,4 +133,14 @@ public class MainActivity extends AppCompatActivity
 		timerView.setText(String.valueOf(seconds));
 	}
 
+	public void AddData(int score, String timeStamp)
+	{
+		boolean insertData = scoreDataSaver.addData(score,timeStamp);
+
+		if (insertData) {
+			Toast.makeText(getApplicationContext(),"Data Successfully Inserted!",Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(getApplicationContext(),"Something went wrong",Toast.LENGTH_SHORT).show();
+		}
+	}
 }
